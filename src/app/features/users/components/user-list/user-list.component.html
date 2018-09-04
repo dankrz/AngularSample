@@ -1,13 +1,23 @@
 <h2>List of Users</h2>
-
-<kendo-grid [data]="gridData" [height]="410">
-  <kendo-grid-column field="userID" title="ID" >
+<kendo-grid
+  [data]="gridData"
+  [height]="533"
+  [sortable]="true"
+  (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
+  (save)="saveHandler($event)" (remove)="removeHandler($event)"
+  (add)="addHandler($event)"
+  [navigable]="true"
+>
+  <ng-template kendoGridToolbarTemplate>
+    <span class="user-list-header">List of Users</span>
+  </ng-template>
+  <kendo-grid-column field="id" title="ID" >
   </kendo-grid-column>
   <kendo-grid-column field="name" title="Name" >
   </kendo-grid-column>
-  <kendo-grid-column field="surname" title="Surname" >
+  <kendo-grid-column field="surname" title="Surname"  >
   </kendo-grid-column>
-  <kendo-grid-column field="birthDate" title="Birthdate" >
+  <kendo-grid-column field="birthDate" title="Birthdate" editor="date" >
   </kendo-grid-column>
   <kendo-grid-column field="phone" title="Phone" >
   </kendo-grid-column>
@@ -15,6 +25,15 @@
   </kendo-grid-column>
   <kendo-grid-column field="street" title="Street" >
   </kendo-grid-column>
-  <kendo-grid-column field="number" title="Number" >
+  <kendo-grid-column field="number" title="Number" editor="number" >
   </kendo-grid-column>
+  <kendo-grid-command-column title="command" width="220">
+    <ng-template kendoGridCellTemplate let-isNew="isNew">
+      <button kendoGridEditCommand [primary]="true">Edit</button>
+      <button kendoGridRemoveCommand>Remove</button>
+      <button kendoGridSaveCommand [disabled]="formGroup?.invalid">{{ isNew ? 'Add' : 'Update' }}</button>
+      <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
+    </ng-template>
+  </kendo-grid-command-column>
 </kendo-grid>
+
