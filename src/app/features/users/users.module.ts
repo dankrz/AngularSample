@@ -9,6 +9,8 @@ import { UserSearchComponent } from './components/user-search/user-search.compon
 import { PopupModule } from '@progress/kendo-angular-popup';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import {ButtonsModule} from '@progress/kendo-angular-buttons';
+import {StoreModule} from '@ngrx/store';
+import {reducers} from './users.module.reducers';
 
 @NgModule({
   imports: [
@@ -19,7 +21,8 @@ import {ButtonsModule} from '@progress/kendo-angular-buttons';
     GridModule,
     InputsModule,
     PopupModule,
-    ButtonsModule
+    ButtonsModule,
+    StoreModule.forFeature('users', reducers),
   ],
   providers: [UserService],
   declarations: [UserListComponent, UsersPageComponent, UserSearchComponent]
