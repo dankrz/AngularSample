@@ -51,7 +51,7 @@ export class UserListComponent implements OnInit {
       'phone': new FormControl(dataItem.phone, Validators.pattern('^[0-9]{1,15}')),
       'city': new FormControl(dataItem.city, Validators.required),
       'street': new FormControl(dataItem.street, Validators.required),
-      'number': new FormControl(dataItem.number, Validators.compose([Validators.required, Validators.pattern('^[0-9]+')])),
+      'number': new FormControl(dataItem.number, Validators.pattern('^[0-9]+')),
     });
 
     // put the row in edit mode, with the `FormGroup` build above
@@ -61,14 +61,14 @@ export class UserListComponent implements OnInit {
   protected addHandler({sender}) {
     // define all editable fields validators and default values
     this.formGroup = new FormGroup({
-      'id': new FormControl(null, Validators.required),
+      'id': new FormControl(null),
       'name': new FormControl('', Validators.required),
       'surname': new FormControl('', Validators.required),
       'birthDate': new FormControl(null, Validators.required),
       'phone': new FormControl('', Validators.pattern('^[0-9]{1,15}')),
       'city': new FormControl('', Validators.required),
       'street': new FormControl('', Validators.required),
-      'number': new FormControl(null, Validators.compose([Validators.required, Validators.pattern('^[0-9]+')])),
+      'number': new FormControl(null,  Validators.pattern('^[0-9]+')),
     });
 
     // show the new row editor, with the `FormGroup` build above
