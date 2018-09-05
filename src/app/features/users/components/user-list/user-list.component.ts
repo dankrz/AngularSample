@@ -15,7 +15,11 @@ export class UserListComponent implements OnInit {
   constructor(private userService: UserService) {
   }
 
-  protected static editHandler({sender, rowIndex, dataItem}) {
+  ngOnInit() {
+    this.gridData = this.userService.getAll();
+  }
+
+  protected editHandler({sender, rowIndex, dataItem}) {
     // define all editable fields validators and default values
     const group = new FormGroup({
       'name': new FormControl(dataItem.name, Validators.required),
@@ -31,7 +35,7 @@ export class UserListComponent implements OnInit {
     sender.editRow(rowIndex, group);
   }
 
-  protected static addHandler({sender}) {
+  protected addHandler({sender}) {
     // define all editable fields validators and default values
     const group = new FormGroup({
       'name': new FormControl('', Validators.required),
@@ -48,18 +52,17 @@ export class UserListComponent implements OnInit {
   }
 
 
-  protected static cancelHandler({sender, rowIndex}) {
+  protected cancelHandler({sender, rowIndex}) {
     // close the editor for the given row
     sender.closeRow(rowIndex);
   }
 
-    ngOnInit() {
-    this.gridData = UserService.getAll();
-  }
 
 
   public removeHandler({dataItem}) {
-    // this.editService.remove(dataItem);
+    this.userService.remove(dataItem);
+    this.gridData = this.userService.getAll();
+
   }
 
   protected saveHandler({sender, rowIndex, formGroup, isNew}) {

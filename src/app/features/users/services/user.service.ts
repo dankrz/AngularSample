@@ -5,11 +5,10 @@ import {parseDate} from '@progress/kendo-angular-intl';
 @Injectable()
 export class UserService {
 
-  constructor() {
-  }
+  private data: ({ id: number; name: string; surname: string; birthDate: any; phone: string; city: string; street: string; number: number } | { id: number; name: string; surname: string; birthDate: any; phone: string; city: string; street: string; number: null })[];
 
-  static getAll(): User[] {
-    return [
+  constructor() {
+    this.data = [
       {
         id: 0,
         name: 'name0',
@@ -51,5 +50,19 @@ export class UserService {
         number: null
       }
     ];
+  }
+
+  getAll(): User[] {
+    return this.data;
+  }
+
+  remove(userToDelete: User) {
+    if (!userToDelete) {
+      return;
+    }
+
+    this.data = this.data.filter((item: User) => {
+      return item.id !== userToDelete.id;
+    });
   }
 }
