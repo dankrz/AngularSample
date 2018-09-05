@@ -325,14 +325,14 @@
     "@telerik/kendo-inputs-common" "^2.2.2"
     tslib "^1.7.0"
 
-"@progress/kendo-angular-intl@^1.5.0":
+"@progress/kendo-angular-intl@^1.4.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@progress/kendo-angular-intl/-/kendo-angular-intl-1.5.0.tgz#26d0fea1522564c7f9ca51daf93afe1312a36217"
   dependencies:
     "@telerik/kendo-intl" "^1.3.0"
     tslib "^1.7.0"
 
-"@progress/kendo-angular-l10n@^1.2.0":
+"@progress/kendo-angular-l10n@^1.1.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@progress/kendo-angular-l10n/-/kendo-angular-l10n-1.2.0.tgz#314a84dfea1255067a4dcd1ef7928f63f067b5ef"
   dependencies:

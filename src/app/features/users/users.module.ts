@@ -6,6 +6,9 @@ import {GridModule} from '@progress/kendo-angular-grid';
 import {UserService} from './services/user.service';
 import { UsersPageComponent } from './containers/users-page/users-page.component';
 import { UserSearchComponent } from './components/user-search/user-search.component';
+import { PopupModule } from '@progress/kendo-angular-popup';
+import { InputsModule } from '@progress/kendo-angular-inputs';
+import {ButtonsModule} from '@progress/kendo-angular-buttons';
 
 @NgModule({
   imports: [
@@ -14,6 +17,9 @@ import { UserSearchComponent } from './components/user-search/user-search.compon
       { path: '', component: UsersPageComponent },
     ]),
     GridModule,
+    InputsModule,
+    PopupModule,
+    ButtonsModule
   ],
   providers: [UserService],
   declarations: [UserListComponent, UsersPageComponent, UserSearchComponent]

@@ -12,4 +12,7 @@ export class UserSearchComponent implements OnInit {
   ngOnInit() {
   }
 
+  public onClick(): void {
+  }
+
 }
