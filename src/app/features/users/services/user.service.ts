@@ -56,6 +56,23 @@ export class UserService {
     return this.data;
   }
 
+  add(userToAdd: User): void {
+    this.data = [...this.data, userToAdd];
+  }
+
+  edit(editedUser: User): void {
+    const newData = this.data.map((item: User) => {
+      if (item.id === editedUser.id) {
+        return editedUser;
+      } else {
+        return item;
+      }
+
+    });
+    this.data = newData;
+  }
+
+
   remove(userToDelete: User) {
     if (!userToDelete) {
       return;

@@ -22,6 +22,7 @@ export class UserListComponent implements OnInit {
   protected editHandler({sender, rowIndex, dataItem}) {
     // define all editable fields validators and default values
     const group = new FormGroup({
+      'id': new FormControl(dataItem.id, Validators.required),
       'name': new FormControl(dataItem.name, Validators.required),
       'surname': new FormControl(dataItem.surname, Validators.required),
       'birthDate': new FormControl(dataItem.birthDate, Validators.required),
@@ -35,21 +36,22 @@ export class UserListComponent implements OnInit {
     sender.editRow(rowIndex, group);
   }
 
-  protected addHandler({sender}) {
-    // define all editable fields validators and default values
-    const group = new FormGroup({
-      'name': new FormControl('', Validators.required),
-      'surname': new FormControl('', Validators.required),
-      'birthDate': new FormControl(null, Validators.required),
-      'phone': new FormControl('', Validators.pattern('^[0-9]{1,15}')),
-      'city': new FormControl('', Validators.required),
-      'street': new FormControl('', Validators.required),
-      'number': new FormControl(null, Validators.compose([Validators.required, Validators.pattern('^[0-9]+')])),
-    });
-
-    // show the new row editor, with the `FormGroup` build above
-    sender.addRow(group);
-  }
+  // protected addHandler({sender}) {
+  //   // define all editable fields validators and default values
+  //   const group = new FormGroup({
+  //      'id': new FormControl(dataItem.id, Validators.required),
+  //      'name': new FormControl('', Validators.required),
+  //     'surname': new FormControl('', Validators.required),
+  //     'birthDate': new FormControl(null, Validators.required),
+  //     'phone': new FormControl('', Validators.pattern('^[0-9]{1,15}')),
+  //     'city': new FormControl('', Validators.required),
+  //     'street': new FormControl('', Validators.required),
+  //     'number': new FormControl(null, Validators.compose([Validators.required, Validators.pattern('^[0-9]+')])),
+  //   });
+  //
+  //   // show the new row editor, with the `FormGroup` build above
+  //   sender.addRow(group);
+  // }
 
 
   protected cancelHandler({sender, rowIndex}) {
@@ -68,10 +70,11 @@ export class UserListComponent implements OnInit {
   protected saveHandler({sender, rowIndex, formGroup, isNew}) {
     // collect the current state of the form
     // `formGroup` arguments is the same as was provided when calling `editRow`
-    const product: User = formGroup.value;
+    const user: User = formGroup.value;
 
     // update the data source
-    // this.editService.save(product, isNew);
+    this.userService.edit(user);
+    this.gridData = this.userService.getAll();
 
     // close the editor, that is, revert the row back into view mode
     sender.closeRow(rowIndex);
