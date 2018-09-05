@@ -39,8 +39,11 @@ export class UserListComponent implements OnInit {
   }
 
   protected editHandler({sender, rowIndex, dataItem}) {
+    if (this.isFormInvalid()) {
+      return;
+    }
     // define all editable fields validators and default values
-    const group = new FormGroup({
+    this.formGroup = new FormGroup({
       'id': new FormControl(dataItem.id, Validators.required),
       'name': new FormControl(dataItem.name, Validators.required),
       'surname': new FormControl(dataItem.surname, Validators.required),
@@ -52,12 +55,12 @@ export class UserListComponent implements OnInit {
     });
 
     // put the row in edit mode, with the `FormGroup` build above
-    sender.editRow(rowIndex, group);
+    sender.editRow(rowIndex, this.formGroup);
   }
 
   protected addHandler({sender}) {
     // define all editable fields validators and default values
-    const group = new FormGroup({
+    this.formGroup = new FormGroup({
       'id': new FormControl(null, Validators.required),
       'name': new FormControl('', Validators.required),
       'surname': new FormControl('', Validators.required),
@@ -69,7 +72,7 @@ export class UserListComponent implements OnInit {
     });
 
     // show the new row editor, with the `FormGroup` build above
-    sender.addRow(group);
+    sender.addRow(this.formGroup);
   }
 
   protected cancelHandler({sender, rowIndex}) {
@@ -78,6 +81,11 @@ export class UserListComponent implements OnInit {
   }
 
   protected saveHandler({sender, rowIndex, formGroup, isNew}) {
+
+    if (this.isFormInvalid()) {
+      return;
+    }
+
     // collect the current state of the form
     // `formGroup` arguments is the same as was provided when calling `editRow`
     const row: User = formGroup.value;
@@ -95,4 +103,9 @@ export class UserListComponent implements OnInit {
     // close the editor, that is, revert the row back into view mode
     sender.closeRow(rowIndex);
   }
+
+  private isFormInvalid() {
+    return this.formGroup && !this.formGroup.valid;
+  }
+
 }

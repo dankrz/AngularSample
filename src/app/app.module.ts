@@ -6,6 +6,8 @@ import {CoreModule} from './core/core.module';
 import {RouterModule} from '@angular/router';
 import {routes} from './routes';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { PopupModule } from '@progress/kendo-angular-popup';
+
 
 @NgModule({
   declarations: [
@@ -16,6 +18,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     CoreModule.forRoot(),
+    PopupModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
