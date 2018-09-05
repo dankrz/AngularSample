@@ -5,7 +5,7 @@ import {parseDate} from '@progress/kendo-angular-intl';
 @Injectable()
 export class UserService {
 
-  private data: ({ id: number; name: string; surname: string; birthDate: any; phone: string; city: string; street: string; number: number } | { id: number; name: string; surname: string; birthDate: any; phone: string; city: string; street: string; number: null })[];
+  private data: User[];
 
   constructor() {
     this.data = [
@@ -57,7 +57,21 @@ export class UserService {
   }
 
   add(userToAdd: User): void {
-    this.data = [...this.data, userToAdd];
+    const lastId = this.data.reduce((maxId: number, item: User) => {
+
+      if (maxId < item.id) {
+        return item.id;
+      }
+
+      return maxId;
+
+    }, 0);
+
+
+    this.data = [...this.data, {
+      ...userToAdd,
+      id: lastId + 1
+    }];
   }
 
   edit(editedUser: User): void {
@@ -82,4 +96,5 @@ export class UserService {
       return item.id !== userToDelete.id;
     });
   }
+
 }

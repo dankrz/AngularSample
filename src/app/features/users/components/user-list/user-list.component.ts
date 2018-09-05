@@ -15,8 +15,27 @@ export class UserListComponent implements OnInit {
   constructor(private userService: UserService) {
   }
 
+  static createUserFromGridRow(user: User): User {
+    return {
+      id: user.id,
+      name: user.name,
+      surname: user.surname,
+      birthDate: user.birthDate,
+      phone: user.phone,
+      city: user.city,
+      street: user.street,
+      number: user.number
+    };
+  }
+
   ngOnInit() {
     this.gridData = this.userService.getAll();
+  }
+
+  public removeHandler({dataItem}) {
+    this.userService.remove(dataItem);
+    this.gridData = this.userService.getAll();
+
   }
 
   protected editHandler({sender, rowIndex, dataItem}) {
@@ -36,44 +55,41 @@ export class UserListComponent implements OnInit {
     sender.editRow(rowIndex, group);
   }
 
-  // protected addHandler({sender}) {
-  //   // define all editable fields validators and default values
-  //   const group = new FormGroup({
-  //      'id': new FormControl(dataItem.id, Validators.required),
-  //      'name': new FormControl('', Validators.required),
-  //     'surname': new FormControl('', Validators.required),
-  //     'birthDate': new FormControl(null, Validators.required),
-  //     'phone': new FormControl('', Validators.pattern('^[0-9]{1,15}')),
-  //     'city': new FormControl('', Validators.required),
-  //     'street': new FormControl('', Validators.required),
-  //     'number': new FormControl(null, Validators.compose([Validators.required, Validators.pattern('^[0-9]+')])),
-  //   });
-  //
-  //   // show the new row editor, with the `FormGroup` build above
-  //   sender.addRow(group);
-  // }
+  protected addHandler({sender}) {
+    // define all editable fields validators and default values
+    const group = new FormGroup({
+      'id': new FormControl(null, Validators.required),
+      'name': new FormControl('', Validators.required),
+      'surname': new FormControl('', Validators.required),
+      'birthDate': new FormControl(null, Validators.required),
+      'phone': new FormControl('', Validators.pattern('^[0-9]{1,15}')),
+      'city': new FormControl('', Validators.required),
+      'street': new FormControl('', Validators.required),
+      'number': new FormControl(null, Validators.compose([Validators.required, Validators.pattern('^[0-9]+')])),
+    });
 
+    // show the new row editor, with the `FormGroup` build above
+    sender.addRow(group);
+  }
 
   protected cancelHandler({sender, rowIndex}) {
     // close the editor for the given row
     sender.closeRow(rowIndex);
   }
 
-
-
-  public removeHandler({dataItem}) {
-    this.userService.remove(dataItem);
-    this.gridData = this.userService.getAll();
-
-  }
-
   protected saveHandler({sender, rowIndex, formGroup, isNew}) {
     // collect the current state of the form
     // `formGroup` arguments is the same as was provided when calling `editRow`
-    const user: User = formGroup.value;
+    const row: User = formGroup.value;
 
     // update the data source
-    this.userService.edit(user);
+    const user: User = UserListComponent.createUserFromGridRow(row);
+    if (isNew) {
+      this.userService.add(user);
+    } else {
+      this.userService.edit(user);
+    }
+
     this.gridData = this.userService.getAll();
 
     // close the editor, that is, revert the row back into view mode
