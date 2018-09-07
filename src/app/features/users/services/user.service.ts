@@ -1,63 +1,36 @@
 import {Injectable} from '@angular/core';
 import {User} from '../models/user';
-import {parseDate} from '@progress/kendo-angular-intl';
+import {formatDate, parseDate} from '@progress/kendo-angular-intl';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {UserDto} from '../models/user-dto';
 
 @Injectable()
 export class UserService {
 
-  private data: User[];
 
-  constructor() {
-    this.data = [
-      {
-        id: 0,
-        name: 'name0',
-        surname: 'surname0',
-        birthDate: parseDate('24-8-1981', 'dd-MM-yyyy'),
-        phone: '634523125',
-        city: 'Wroclaw',
-        street: 'Mydlana',
-        number: 1
-      },
-      {
-        id: 1,
-        name: 'name1',
-        surname: 'surname1',
-        birthDate: parseDate('28-9-1983', 'dd-MM-yyyy'),
-        phone: '812312312',
-        city: 'Warsaw',
-        street: 'Domaniewska',
-        number: 2
-      },
-      {
-        id: 2,
-        name: 'name2',
-        surname: 'surname2',
-        birthDate: parseDate('01-6-1983', 'dd-MM-yyyy'),
-        phone: '987654412',
-        city: 'Wroclaw',
-        street: 'Mydlana',
-        number: 2
-      },
-      {
-        id: 3,
-        name: 'name3',
-        surname: 'surname3',
-        birthDate: parseDate('05-5-1978', 'dd-MM-yyyy'),
-        phone: '812312312',
-        city: 'Wroclaw',
-        street: 'Himalajska',
-        number: null
-      }
-    ];
+  private _apiUrl = 'http://localhost:3000/users';
+
+  constructor(private http: HttpClient) {
   }
 
-  getAll(): User[] {
-    return this.data;
+  getAll(): Observable<User[]> {
+    return this.http.get<UserDto[]>(this._apiUrl).pipe(
+      map((userDtoList) => userDtoList.map(userDto => this.convertFromDtoToUser(userDto)))
+    );
   }
 
-  add(userToAdd: User): void {
-    const lastId = this.data.reduce((maxId: number, item: User) => {
+  add(userToAdd: User): Observable<User> {
+
+    return this.http.post<UserDto>(this._apiUrl, this.convertFromUserToDto(userToAdd))
+      .pipe(
+        map(user => this.convertFromDtoToUser(user))
+      );
+  }
+
+  findNextId(users: User[]): number {
+    const lastId = users.reduce((maxId: number, item: User) => {
 
       if (maxId < item.id) {
         return item.id;
@@ -67,34 +40,51 @@ export class UserService {
 
     }, 0);
 
-
-    this.data = [...this.data, {
-      ...userToAdd,
-      id: lastId + 1
-    }];
+    return lastId + 1;
   }
 
-  edit(editedUser: User): void {
-    const newData = this.data.map((item: User) => {
-      if (item.id === editedUser.id) {
-        return editedUser;
-      } else {
-        return item;
-      }
-
-    });
-    this.data = newData;
+  edit(userToEdit: User): Observable<User> {
+    return this.http.put<UserDto>(this.buildUserUrl(userToEdit), this.convertFromUserToDto(userToEdit))
+      .pipe(
+        map(user => this.convertFromDtoToUser(user))
+      );
   }
 
-
-  remove(userToDelete: User) {
-    if (!userToDelete) {
+  remove(user: User) {
+    if (!user) {
       return;
     }
 
-    this.data = this.data.filter((item: User) => {
-      return item.id !== userToDelete.id;
-    });
+    return this.http.delete<User>(this.buildUserUrl(user));
   }
 
+  private convertFromDtoToUser(userDto: UserDto): User {
+    return {
+      id: userDto.id,
+      name: userDto.name,
+      surname: userDto.surname,
+      birthDate: parseDate(userDto.birthDate, 'dd-MM-yyyy'),
+      phone: userDto.phone,
+      city: userDto.city,
+      street: userDto.street,
+      number: userDto.number,
+    };
+  }
+
+  private convertFromUserToDto(user: User): UserDto {
+    return {
+      id: user.id,
+      name: user.name,
+      surname: user.surname,
+      birthDate: formatDate(user.birthDate, 'dd-MM-yyyy'),
+      phone: user.phone,
+      city: user.city,
+      street: user.street,
+      number: user.number,
+    };
+  }
+
+  private buildUserUrl(user: User) {
+    return this._apiUrl + `/${user.id}`;
+  }
 }

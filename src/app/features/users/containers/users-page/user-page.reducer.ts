@@ -1,22 +1,22 @@
 import {User} from '../../models/user';
 import {UsersActionsUnion, UsersActionTypes} from './user-page.actions';
 
-export interface UsersState {
+export interface UsersPageState {
   users: User[];
 }
 
-const initialState: UsersState = {
+const initialState: UsersPageState = {
   users: [],
 };
 
 
-export function usersReducer(
+export function usersPageReducer(
   state = initialState,
   action: UsersActionsUnion
-): UsersState {
+): UsersPageState {
   switch (action.type) {
 
-    case UsersActionTypes.LoadSuccess: {
+    case UsersActionTypes.LoadUsersSuccess: {
       return {
         users: action.payload,
       };
@@ -49,4 +49,4 @@ export function usersReducer(
   }
 }
 
-export const getUsers = (state: UsersState) => state.users;
+export const getUsers = (state: UsersPageState) => state.users;

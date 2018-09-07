@@ -7,6 +7,10 @@ import {RouterModule} from '@angular/router';
 import {routes} from './routes';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {StoreModule} from '@ngrx/store';
+import {HttpClientModule} from '@angular/common/http';
+import {EffectsModule} from '@ngrx/effects';
+import {appReducers, metaReducers} from './app.module.reducers';
+import {StoreRouterConnectingModule} from '@ngrx/router-store';
 
 
 
@@ -17,8 +21,13 @@ import {StoreModule} from '@ngrx/store';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     RouterModule.forRoot(routes),
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(appReducers, {metaReducers}),
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router',
+    }),
+    EffectsModule.forRoot([]),
     CoreModule.forRoot(),
   ],
   providers: [],

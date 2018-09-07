@@ -1,3 +1,7 @@
 
 <tt-user-search></tt-user-search>
-<tt-user-list></tt-user-list>
+<tt-user-list [users]="users | async"
+  (addUser)="onAddUser($event)"
+  (editUser)="onEditUser($event)"
+  (removeUser)="onRemoveUser($event)">
+</tt-user-list>

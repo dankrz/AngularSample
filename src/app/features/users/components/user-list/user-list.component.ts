@@ -1,5 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {UserService} from '../../services/user.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../models/user';
 
@@ -10,9 +9,20 @@ import {User} from '../../models/user';
 })
 export class UserListComponent implements OnInit {
   public formGroup: FormGroup;
-  public gridData: any[] = [];
 
-  constructor(private userService: UserService) {
+  @Input()
+  public users: User[];
+
+  @Output()
+  public removeUser = new EventEmitter<User>();
+
+  @Output()
+  public addUser = new EventEmitter<User>();
+
+  @Output()
+  public editUser = new EventEmitter<User>();
+
+  constructor() {
   }
 
   static createUserFromGridRow(user: User): User {
@@ -29,13 +39,10 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.gridData = this.userService.getAll();
   }
 
   public removeHandler({dataItem}) {
-    this.userService.remove(dataItem);
-    this.gridData = this.userService.getAll();
-
+    this.removeUser.emit(dataItem);
   }
 
   protected editHandler({sender, rowIndex, dataItem}) {
@@ -93,12 +100,10 @@ export class UserListComponent implements OnInit {
     // update the data source
     const user: User = UserListComponent.createUserFromGridRow(row);
     if (isNew) {
-      this.userService.add(user);
+      this.addUser.emit(user);
     } else {
-      this.userService.edit(user);
+      this.editUser.emit(user);
     }
-
-    this.gridData = this.userService.getAll();
 
     // close the editor, that is, revert the row back into view mode
     sender.closeRow(rowIndex);
