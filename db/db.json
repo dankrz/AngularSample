@@ -41,16 +41,6 @@
       "number": null
     },
     {
-      "id": 4,
-      "name": "1",
-      "surname": "2",
-      "birthDate": "2018-09-03T22:00:00.000Z",
-      "phone": "3",
-      "city": "4",
-      "street": "5",
-      "number": "6"
-    },
-    {
       "id": 5,
       "name": "kris",
       "surname": "newman",
