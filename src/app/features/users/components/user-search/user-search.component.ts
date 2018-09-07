@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'tt-user-search',
@@ -7,12 +7,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserSearchComponent implements OnInit {
 
+  @Input()
+  query: string;
+
+  @Output()
+  queryChange = new EventEmitter<string>();
+
   constructor() { }
 
   ngOnInit() {
   }
 
-  public onClick(): void {
+
+  public onSearchInput(event: any): void {
+    const newQuery = event.target.value;
+    this.queryChange.emit(newQuery);
+  }
+
+  public onClearClick(event: any) {
+    this.queryChange.emit('');
   }
 
 }

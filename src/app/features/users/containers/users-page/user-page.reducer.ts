@@ -1,12 +1,14 @@
-import { User } from "../../models/user";
-import { UsersActionsUnion, UsersActionTypes, EditUserFail } from './user-page.actions';
+import { User } from '../../models/user';
+import { UsersActionsUnion, UsersActionTypes, EditUserFail, ChangeSearchQuery, ChangeSearchQuerySuccess } from './user-page.actions';
 
 export interface UsersPageState {
   users: User[];
+  searchQuery: string;
 }
 
 const initialState: UsersPageState = {
-  users: []
+  users: [],
+  searchQuery: ''
 };
 
 export function usersPageReducer(
@@ -16,6 +18,21 @@ export function usersPageReducer(
   switch (action.type) {
     case UsersActionTypes.LoadUsersSuccess: {
       return {
+        ...state,
+        users: action.payload
+      };
+    }
+
+    case UsersActionTypes.ChangeSearchQuery: {
+      return {
+        ...state,
+        searchQuery: action.payload
+      };
+    }
+
+    case UsersActionTypes.ChangeSearchQuerySuccess: {
+      return {
+        ...state,
         users: action.payload
       };
     }
@@ -73,3 +90,4 @@ export function usersPageReducer(
 }
 
 export const getUsers = (state: UsersPageState) => state.users;
+export const getSearchQuery = (state: UsersPageState) => state.searchQuery;

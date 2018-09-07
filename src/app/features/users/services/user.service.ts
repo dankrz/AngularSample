@@ -3,7 +3,7 @@ import {User} from '../models/user';
 import {formatDate, parseDate} from '@progress/kendo-angular-intl';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, filter} from 'rxjs/operators';
 import {UserDto} from '../models/user-dto';
 
 @Injectable()
@@ -18,6 +18,12 @@ export class UserService {
   getAll(): Observable<User[]> {
     return this.http.get<UserDto[]>(this._apiUrl).pipe(
       map((userDtoList) => userDtoList.map(userDto => this.convertFromDtoToUser(userDto)))
+    );
+  }
+
+  findAllWith(query: string) {
+    return this.getAll().pipe(
+      map((users: User[]) => users.filter(u => u.name.startsWith(query)))
     );
   }
 
@@ -42,6 +48,7 @@ export class UserService {
 
     return lastId + 1;
   }
+  
 
   edit(userToEdit: User): Observable<User> {
     return this.http.put<UserDto>(this.buildUserUrl(userToEdit), this.convertFromUserToDto(userToEdit))

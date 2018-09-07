@@ -1,9 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import {select, Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {User} from '../../models/user';
-import {AddUser, EditUser, LoadUsers, RemoveUser} from './user-page.actions';
-import {getUsersSelector, State} from '../../users.module.reducers';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { User } from '../../models/user';
+import {
+  AddUser,
+  EditUser,
+  LoadUsers,
+  RemoveUser,
+  ChangeSearchQuery
+} from './user-page.actions';
+import {
+  getUsersSelector,
+  State,
+  getSearchQuerySelector
+} from '../../users.module.reducers';
 
 @Component({
   selector: 'tt-users-page',
@@ -12,15 +22,16 @@ import {getUsersSelector, State} from '../../users.module.reducers';
 })
 export class UsersPageComponent implements OnInit {
   protected users: Observable<User[]>;
+  protected searchQuery: Observable<string>;
 
   constructor(private store: Store<State>) {
     this.users = this.store.pipe(select(getUsersSelector));
+    this.searchQuery = this.store.pipe(select(getSearchQuerySelector));
   }
 
   ngOnInit() {
     this.store.dispatch(new LoadUsers());
   }
-
 
   onAddUser(user: User) {
     this.store.dispatch(new AddUser(user));
@@ -32,5 +43,9 @@ export class UsersPageComponent implements OnInit {
 
   onEditUser(user: User) {
     this.store.dispatch(new EditUser(user));
+  }
+
+  onSearchQueryChange(query: string) {
+    this.store.dispatch(new ChangeSearchQuery(query));
   }
 }

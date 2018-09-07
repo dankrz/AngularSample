@@ -1,32 +1,48 @@
-import {Injectable} from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
-import {UserService} from '../../services/user.service';
-import {Observable, of} from 'rxjs';
-import {Action, select, Store} from '@ngrx/store';
+import { Injectable } from '@angular/core';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { UserService } from '../../services/user.service';
+import { Observable, of } from 'rxjs';
+import { Action, select, Store } from '@ngrx/store';
 import {
   AddUser,
   AddUserFail,
-  AddUserSuccess, EditUser,
+  AddUserSuccess,
+  EditUser,
   LoadUsersFail,
-  LoadUsersSuccess, RemoveUser,
+  LoadUsersSuccess,
+  RemoveUser,
   RemoveUserFail,
   RemoveUserSuccess,
   UsersActionTypes,
   EditUserSuccess,
-  EditUserFail
+  EditUserFail,
+  ChangeSearchQuery,
+  LoadUsers,
+  ChangeSearchQuerySuccess,
+  ChangeSearchQueryFail
 } from './user-page.actions';
-import {catchError, map, mergeMap, switchMap, withLatestFrom} from 'rxjs/operators';
-import {User} from '../../models/user';
-import {getUsersSelector, State} from '../../users.module.reducers';
+import {
+  catchError,
+  map,
+  mergeMap,
+  switchMap,
+  withLatestFrom,
+  debounceTime,
+  filter
+} from 'rxjs/operators';
+import { User } from '../../models/user';
+import {
+  getUsersSelector,
+  State,
+  getSearchQuerySelector
+} from '../../users.module.reducers';
 
 @Injectable()
 export class UsersEffects {
-
-
   @Effect()
   loadUsers$: Observable<Action> = this.actions$.pipe(
     ofType(UsersActionTypes.LoadUsers),
-    switchMap(() =>
+    switchMap((action: LoadUsers) =>
       this.userService.getAll().pipe(
         map((users: User[]) => new LoadUsersSuccess(users)),
         catchError(error => of(new LoadUsersFail(error)))
@@ -34,19 +50,50 @@ export class UsersEffects {
     )
   );
 
+  // @Effect()
+  // changeSearchQuery$: Observable<Action> = this.actions$.pipe(
+  //   ofType(UsersActionTypes.ChangeSearchQuery),
+  //   debounceTime(300),
+  //   withLatestFrom(this.store.pipe(select(getUsersSelector))),
+  //   map(([action, users]: [ChangeSearchQuery, User[]]) => [
+  //     action.payload,
+  //     users
+  //   ]),
+  //   switchMap(
+  //     ([searchQuery, users]: [string, User[]]) =>
+  //       !Array.isArray(users)
+  //         ? <Observable<Action>>(
+  //             of(new ChangeSearchQueryFail('Invalid parameters'))
+  //           )
+  //         : <Observable<Action>>(
+  //             of(
+  //               new ChangeSearchQuerySuccess(
+  //                 users.filter(
+  //                   u =>
+  //                     (searchQuery || '') === '' ||
+  //                     (u.name || '').startsWith(searchQuery)
+  //                 )
+  //               )
+  //             )
+  //           )
+  //   )
+  // );
+
   @Effect()
   addUserToUsers$: Observable<Action> = this.actions$.pipe(
     ofType<AddUser>(UsersActionTypes.AddUser),
     withLatestFrom(this.store.pipe(select(getUsersSelector))),
     map(([action, users]: [AddUser, User[]]) => [action.payload, users]),
     mergeMap(([user, users]: [User, User[]]) =>
-      this.userService.add({
-        ...user,
-        id: this.userService.findNextId(users)
-      }).pipe(
-        map((addedUser: User) => new AddUserSuccess(addedUser)),
-        catchError(() => of(new AddUserFail(user)))
-      )
+      this.userService
+        .add({
+          ...user,
+          id: this.userService.findNextId(users)
+        })
+        .pipe(
+          map((addedUser: User) => new AddUserSuccess(addedUser)),
+          catchError(() => of(new AddUserFail(user)))
+        )
     )
   );
 
@@ -74,5 +121,9 @@ export class UsersEffects {
     )
   );
 
-  constructor(private actions$: Actions, private userService: UserService, private store: Store<State>) {}
+  constructor(
+    private actions$: Actions,
+    private userService: UserService,
+    private store: Store<State>
+  ) {}
 }

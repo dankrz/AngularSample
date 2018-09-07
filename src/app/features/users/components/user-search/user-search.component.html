@@ -1,7 +1,7 @@
 <kendo-textbox-container floatingLabel="Search by Name">
-  <input kendoTextBox />
+  <input kendoTextBox [value]="query" (input)="onSearchInput($event)"/>
 </kendo-textbox-container>
 <button kendoButton
-        (click)="onClick()">
+        (click)="onClearClick($event)">
   Clear
 </button>

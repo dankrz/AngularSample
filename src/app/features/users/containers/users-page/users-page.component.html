@@ -1,5 +1,5 @@
 
-<tt-user-search></tt-user-search>
+<tt-user-search [query]="searchQuery | async" (queryChange)="onSearchQueryChange($event)"></tt-user-search>
 <tt-user-list [users]="users | async"
   (addUser)="onAddUser($event)"
   (editUser)="onEditUser($event)"

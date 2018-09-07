@@ -14,6 +14,9 @@ export enum UsersActionTypes {
   LoadUsers = '[Users] Load Users',
   LoadUsersSuccess = '[Users] Load Users Success',
   LoadUsersFail = '[Users] Load Users Fail',
+  ChangeSearchQuery = '[Users] Change Search Query',
+  ChangeSearchQuerySuccess = '[Users] Change Search Query Success',
+  ChangeSearchQueryFail = '[Users] Change Search Query Fail',
 }
 export class AddUser implements Action {
   readonly type = UsersActionTypes.AddUser;
@@ -85,6 +88,25 @@ export class LoadUsersFail implements Action {
   constructor(public payload: any) {}
 }
 
+export class ChangeSearchQuery implements Action {
+  readonly type = UsersActionTypes.ChangeSearchQuery;
+
+  constructor(public payload: string) {}
+}
+
+export class ChangeSearchQuerySuccess implements Action {
+  readonly type = UsersActionTypes.ChangeSearchQuerySuccess;
+
+  constructor(public payload: User[]) {}
+}
+
+export class ChangeSearchQueryFail implements Action {
+  readonly type = UsersActionTypes.ChangeSearchQueryFail;
+
+  constructor(public payload: any) {}
+}
+
+
 export type UsersActionsUnion =
   | AddUser
   | AddUserSuccess
@@ -97,4 +119,7 @@ export type UsersActionsUnion =
   | RemoveUserFail
   | LoadUsers
   | LoadUsersSuccess
-  | LoadUsersFail;
+  | LoadUsersFail
+  | ChangeSearchQuery
+  | ChangeSearchQueryFail
+  | ChangeSearchQuerySuccess;
