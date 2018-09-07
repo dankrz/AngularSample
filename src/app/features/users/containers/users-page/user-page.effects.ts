@@ -6,12 +6,14 @@ import {Action, select, Store} from '@ngrx/store';
 import {
   AddUser,
   AddUserFail,
-  AddUserSuccess,
+  AddUserSuccess, EditUser,
   LoadUsersFail,
   LoadUsersSuccess, RemoveUser,
   RemoveUserFail,
   RemoveUserSuccess,
-  UsersActionTypes
+  UsersActionTypes,
+  EditUserSuccess,
+  EditUserFail
 } from './user-page.actions';
 import {catchError, map, mergeMap, switchMap, withLatestFrom} from 'rxjs/operators';
 import {User} from '../../models/user';
@@ -44,6 +46,18 @@ export class UsersEffects {
       }).pipe(
         map((addedUser: User) => new AddUserSuccess(addedUser)),
         catchError(() => of(new AddUserFail(user)))
+      )
+    )
+  );
+
+  @Effect()
+  editUserToUsers$: Observable<Action> = this.actions$.pipe(
+    ofType<EditUser>(UsersActionTypes.EditUser),
+    map((action: EditUser) => action.payload),
+    mergeMap((user: User) =>
+      this.userService.edit(user).pipe(
+        map((addedUser: User) => new EditUserSuccess(addedUser)),
+        catchError(() => of(new EditUserFail(user)))
       )
     )
   );

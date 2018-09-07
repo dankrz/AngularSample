@@ -1,37 +1,60 @@
-import {User} from '../../models/user';
-import {UsersActionsUnion, UsersActionTypes} from './user-page.actions';
+import { User } from "../../models/user";
+import { UsersActionsUnion, UsersActionTypes, EditUserFail } from './user-page.actions';
 
 export interface UsersPageState {
   users: User[];
 }
 
 const initialState: UsersPageState = {
-  users: [],
+  users: []
 };
-
 
 export function usersPageReducer(
   state = initialState,
   action: UsersActionsUnion
 ): UsersPageState {
   switch (action.type) {
-
     case UsersActionTypes.LoadUsersSuccess: {
       return {
-        users: action.payload,
+        users: action.payload
       };
     }
 
     case UsersActionTypes.AddUserSuccess:
     case UsersActionTypes.RemoveUserFail: {
-      const matchedUsers = state.users.filter((user: User) => user.id === action.payload.id);
+      const matchedUsers = state.users.filter(
+        (user: User) => user.id === action.payload.id
+      );
       if (matchedUsers.length > 0) {
         return state;
       }
 
       return {
         ...state,
-        users: [...state.users, action.payload],
+        users: [...state.users, action.payload]
+      };
+    }
+
+    case UsersActionTypes.EditUserSuccess:
+    case UsersActionTypes.EditUserFail: {
+      const matchedUser = state.users.filter(
+        (user: User) => user.id === action.payload.id
+      )[0];
+      if (!matchedUser) {
+        return state;
+      }
+
+      const editedUsers = state.users.map(u => {
+        if (u.id === action.payload.id) {
+          return action.payload;
+        } else {
+          return u;
+        }
+      });
+
+      return {
+        ...state,
+        users: editedUsers
       };
     }
 
@@ -39,7 +62,7 @@ export function usersPageReducer(
     case UsersActionTypes.AddUserFail: {
       return {
         ...state,
-        users: state.users.filter(user => user.id !== action.payload.id),
+        users: state.users.filter(user => user.id !== action.payload.id)
       };
     }
 
