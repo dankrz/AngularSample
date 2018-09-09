@@ -10,7 +10,8 @@ describe('UserListComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ UserListComponent ]
     })
-    .compileComponents();
+      .overrideTemplate(UserListComponent, '')
+      .compileComponents();
   }));
 
   beforeEach(() => {

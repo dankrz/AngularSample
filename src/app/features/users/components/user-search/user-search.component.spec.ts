@@ -10,6 +10,7 @@ describe('UserSearchComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ UserSearchComponent ]
     })
+    .overrideTemplate(UserSearchComponent, '')
     .compileComponents();
   }));
 

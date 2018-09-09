@@ -15,7 +15,7 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  private static convertFromUserToDto(user: User): UserDto {
+  static convertFromUserToDto(user: User): UserDto {
     return {
       id: user.id,
       name: user.name,
@@ -28,7 +28,7 @@ export class UserService {
     };
   }
 
-  private static convertFromDtoToUser(userDto: UserDto): User {
+  static convertFromDtoToUser(userDto: UserDto): User {
     return {
       id: userDto.id,
       name: userDto.name,

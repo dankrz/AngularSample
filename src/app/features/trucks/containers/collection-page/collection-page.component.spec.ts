@@ -10,7 +10,8 @@ describe('CollectionPageComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ CollectionPageComponent ]
     })
-    .compileComponents();
+      .overrideTemplate(CollectionPageComponent, '')
+      .compileComponents();
   }));
 
   beforeEach(() => {
