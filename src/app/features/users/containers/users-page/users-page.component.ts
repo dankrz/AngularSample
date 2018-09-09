@@ -8,7 +8,7 @@ import {
   LoadUsers,
   RemoveUser,
   ChangeSearchQuery
-} from './user-page.actions';
+} from './users-page.actions';
 import {
   getUsersSelector,
   State,

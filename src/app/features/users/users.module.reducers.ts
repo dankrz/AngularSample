@@ -1,5 +1,5 @@
 import {ActionReducerMap, createFeatureSelector, createSelector} from '@ngrx/store';
-import { getUsers, usersPageReducer, UsersPageState, getSearchQuery } from './containers/users-page/user-page.reducer';
+import { getUsers, usersPageReducer, UsersPageState, getSearchQuery } from './containers/users-page/users-page.reducer';
 import {AppState} from '../../app.module.reducers';
 
 

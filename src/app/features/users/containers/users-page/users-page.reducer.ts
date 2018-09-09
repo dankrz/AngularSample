@@ -1,5 +1,5 @@
 import { User } from '../../models/user';
-import { UsersActionsUnion, UsersActionTypes, EditUserFail, ChangeSearchQuery, ChangeSearchQuerySuccess } from './user-page.actions';
+import { UsersActionsUnion, UsersActionTypes} from './users-page.actions';
 
 export interface UsersPageState {
   users: User[];

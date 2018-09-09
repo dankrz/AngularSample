@@ -12,7 +12,7 @@ import {ButtonsModule} from '@progress/kendo-angular-buttons';
 import {StoreModule} from '@ngrx/store';
 import {reducers} from './users.module.reducers';
 import {EffectsModule} from '@ngrx/effects';
-import {UsersEffects} from './containers/users-page/user-page.effects';
+import {UsersPageEffects} from './containers/users-page/users-page.effects';
 
 @NgModule({
   imports: [
@@ -25,7 +25,7 @@ import {UsersEffects} from './containers/users-page/user-page.effects';
     PopupModule,
     ButtonsModule,
     StoreModule.forFeature('userModule', reducers),
-    EffectsModule.forFeature([UsersEffects]),
+    EffectsModule.forFeature([UsersPageEffects]),
   ],
   providers: [UserService],
   declarations: [UserListComponent, UsersPageComponent, UserSearchComponent]
