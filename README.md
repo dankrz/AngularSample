@@ -1,8 +1,15 @@
 # AngularSample
 
-AngularSample is an Angular 6 application which have two modules. One module users for 
+AngularSample is an Angular 6 application which has two modules. One module UsersModule for 
 adding, removing and editing user information as in requirements. There is as well 
-an additional sample truck module. 
+an additional sample module TrucksModule. For each module was used lazy loading with RouterModule.
+ 
+Regarding UsersModule, the model of smart and dummy components is used. 
+Two dummy components UserListComponent and UserSearchComponent were created. 
+There is a smart component UsersPageComponent which handle business logic. 
+For handling changes is used ngrx actions, store, and effects which communicates 
+via HttpClient to simple REST services provided by json-server. 
+ 
 
 ## Starting project
 
@@ -10,7 +17,7 @@ an additional sample truck module.
 2. Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`.
 
 ## Technologies used
-Angular 6.1.5, ngrx (store, effects), rxjs, json-server, 
+Angular 6.1.5, ngrx (store, effects), rxjs, kendo-ui, bootstrap, json-server, 
 
 ## Running unit tests
 
