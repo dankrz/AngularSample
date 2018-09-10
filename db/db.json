@@ -39,16 +39,6 @@
       "city": "Wroclaw",
       "street": "Himalajska",
       "number": null
-    },
-    {
-      "id": 5,
-      "name": "kris",
-      "surname": "newman",
-      "birthDate": "10-09-2018",
-      "phone": "123",
-      "city": "Kansas",
-      "street": "Yellow",
-      "number": "7"
     }
   ]
 }
